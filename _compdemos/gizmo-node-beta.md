@@ -38,7 +38,25 @@ As part of this work we are creating a mailing list for those of you participati
 
 As with the existing _rhinos_, the new _rhino_ nodes are intended for interactive development and testing and should not be used for computationally intensive work which should be directed to the cluster nodes via Slurm.
 
-> There is currently no load management on the new _rhino_ nodes, so please take care with your processes.  We are in the process of evaluating a few different options for managing load- the current "loadwatcher" is effective but can be rather cruel at times.  During this evaulation period please do your best to keep your processes from overwhelming the system.
+The package [arbiter](https://gitlab.chpc.utah.edu/arbiter2/arbiter2) is being used to ensure that single users don't overwhelm the rhino nodes.  It does this by limiting the available CPU and memory for individual users (as opposed to killing all processes belonging to a user).  Arbiter will email you if your processes are over the limit and are being restricted.  Note that memory limits are enforced and can cause process failures if your memory use exceeds the limits.
+
+Arbiter allows a certain amount of "flex" in usage- the intention is to allow short bursts of high usage, but eventually limit that usage to keep the system responsive for others. Thus, as high levels of usage continue- arbiter will reduce limits for a user's processes in a phased manner.
+
+> At this time the memory limit is not reduced.
+
+### Normal Limits
+
+The nominal limits are 16 CPUS and 48GB memory.  During "normal" times you can use up to 90% of those limits for 5 minutes.  If usage continues at those levels past five minutes, your session will reach the first penalty phase.
+
+### First Penalty Phase Limits (new)
+
+In this phase, you will get a warning via email.  Your CPU share is reduced to 80% of the nominal.
+
+### Second Penalty Phase Limits (ongoing)
+
+If elevated usage continues, you will enter the "ongoing" phase with another email indicating as much.  Your CPU share is reduced to 60% of the nominal CPU limit.
+
+Once your usage moderates, your limits will return to normal after 5 minutes. 
 
 ## Access
 
