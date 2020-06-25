@@ -1,43 +1,55 @@
 ---
-title: GDC Data Download "How-To" Using R/RStudio
+title: Downloading GDC Data with R
 main_author: Jenny Smith
-primary_reviewers: vortexing, jennylsmith
+primary_reviewers: vortexing, k8hertweck
 ---
 
 
-The purpose of this 'How-To' is to demonstrate the use of the [GDC](https://gdc.cancer.gov/) Repository to access the next generation sequencing data from TCGA and TARGET projects.
+The purpose of this tutorial is to demonstrate the use of the [Genomic Data Commons (GDC)](https://gdc.cancer.gov/) to access next generation sequencing data from TCGA and TARGET projects.
 
-The GCD is a central repository for a large and varied human cancer datasets, as well as some limited data from cell lines. It also contains the associated clinical data for these samples.
+The GDC is a central repository for a large and varied human cancer datasets, as well as some limited data from cell lines. It also contains the associated clinical data for these samples.
 
-This can be a helpful source to download this data locally for a variety of uses ranging from example datasets to use when testing new code, to retrieving it for validation of results you've found.
+You may be interested in downloading these data for variety of reasons, ranging from testing new code using GDC data as examples, to validating results in your own data.
 
-This tutorial will demonstrate how to download the RNA-seq data from the TARGET Pediatric Cancer project as well as the clinical data. Of course, there are various options for downloading data from TCGA/TARGET ranging using the GCD command line tool, or from various other repositories  FTP sites like Broad Firehouse, UCSC XENA browser, and using TARGET data matrix.
+Other options for downloading TCGA and TARGET data include:
+- [GDC command line tool](https://docs.gdc.cancer.gov/Data_Transfer_Tool/Users_Guide/Data_Download_and_Upload/)
+- [Broad Firehouse](https://gdac.broadinstitute.org)
+- [UCSC XENA](https://xena.ucsc.edu)
+- [TARGET data matrix](https://ocg.cancer.gov/programs/target/data-matrix) 
+
+The methods described here are an appropriate method of downloading these data if you intend to continue evaluating them using R, especially Bioconductor packages. This tutorial provides a general orientation to the `GenomicDataCommons` package, then demonstrate how to download clinical and RNA-seq data from TARGET pediatric studies. 
 
 ## Installation  
 
 We will use the `GenomicDataCommons` [Bioconductor package](
 https://bioconductor.org/packages/release/bioc/vignettes/GenomicDataCommons/inst/doc/overview.html#quickstart). It should be noted that there is an alternative package, `TCGAbiolinks` for only [TCGA data](http://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/index.html), but will not be covered here.
 
+Install the package using standard instructions from Bioconductor:
+
 ```
+if (!require("BiocManager"))
+    install.packages("BiocManager")
 BiocManager::install('GenomicDataCommons')
 library(GenomicDataCommons)
 ```
 
-#Orientation with Package
+# Orientation to the `GenomicDataCommons` package
 
-There are 4 main types of objects:
-1. projects()
-2. files()
-3. cases()
-4. annotations()
+There are 4 main types of objects in `GenomicDataCommons`:
+1. `projects()`
+2. `files()`
+3. `cases()`
+4. `annotations()`
 
-Each of these can be filtered and specific fields can be selected.
-Then piped (`%>%`) into `results()` or `results_all()` to get a manifest file, which is a list with each file/case ID and also associated metadata for the files.
+Each of these can be filtered by specific fields,
+then piped (`%>%`) into `results()` or `results_all()` to get a manifest file. The manifest file is a list with each file/case ID and associated metadata.
 
-First, check your connection to the database.
+First, check your connection to the database:
 ```
 GenomicDataCommons::status()
 ```
+
+If you want to expicitly and more easily check that the connection is working:
 ```
 stopifnot(GenomicDataCommons::status()$status=="OK")
 ```
