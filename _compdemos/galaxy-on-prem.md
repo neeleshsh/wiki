@@ -5,54 +5,104 @@ main_author: Dirk Petersen
 primary_reviewers: atombaby, k8hertweck
 ---
 
-[Galaxy](https://usegalaxy.org/) is an open, web-based platform for accessible, reproducible, and transparent computational research. Users can use the public instance of Galaxy, or at the Hutch, we provide acccess to self service installations with the following features:
+Galaxy is an open, web-based platform for accessible, reproducible, and transparent computational research, particularly for genomics data. 
+Other organizations make [Galaxy](https://usegalaxy.org/) available for free use by academic researchers,
+but this requires you to transfer your data,
+and the computational capacity is limited since it is shared with many other people.
+Our current method of supporting Galaxy for the Fred Hutch research community is via our on-premise compute clusters, 
+`rhino` and `gizmo`.
+Individual researchers have the ability to create, administer, and run their own instances (copies) of the Galaxy platform, 
+including choosing and loading all software necessary for their analysis. 
 
-- HutchNet ID authentication will be used 
-- The instance will run with the launching user's permissions, these will be used for all data library access (e.g. file system)
-- User maintains their own workflows (and thus can migratee them to newer installation of Galaxy if/when needed)
-- User can self install the software as well as restart existing Galaxy servers, or make new ones if needed
-- A simple database is provided (sqlite instead of Postgres)
-- Each user can have access to multiple Galaxy instances (e.g. in case software updates need to be implemented)
-- Galaxy server will run on a `gizmo` node, thus compute capacity is limited to single node (36 cores)
+The steps to run Galaxy include:
+- create your Galaxy instance
+- load your data and software
+- 
 
+## Creating your first Galaxy instance
 
-Please check the [Galaxy Documentation](https://docs.galaxyproject.org/) for more general information about using Galaxy.  
+The steps to create a Galaxy instance include:
+- logging on to `rhino`
+- running the `galaxy` command (takes ~30 minutes to create an instance)
+- launching the Galaxy instance through a web interface
 
+While this does require a bit of setup when getting started,
+you only need to do this once,
+after which you're able to retrieve the same instance and begin working with data more quickly.
 
-## How to use Galaxy on Gizmo:
+Creating and using Galaxy on `gizmo` requires you to first log on to the Fred Hutch on-premise compute cluster `rhino`.
+If you aren't familiar with this process, 
+please see [this tutorial](/compdemos/first_rhino/).
+Note that you will need to keep the shell window connecting you to `rhino` open while the instance is being created.
+One way to ensure this connectivity is to use [tmux or NoMachine](/scicomputing/access_methods/)] to ensure a long-running shell.
 
-Starting Galaxy is simple. You just run the `galaxy` command on Rhino. Run this command in a new shell that won't be canceled/closed for a while. [We recommend tmux or NoMachine for long running shells.](/scicomputing/access_methods/). When you run the command the first time, you may just the the "New Install" option, but in the future you can reconnect to a previous install by selecting one of the other options.  
+Once logged on to `rhino`,
+run the `galaxy` command as shown below. 
+To create your first instance,
+type `1` and hit "Enter".
+When prompted, type the name and hit "Enter".
+This will create a new folder in your `/fast/` drive named `galaxies`, 
+then download and install the relevant software in a folder within `galaxies` with the name you indicated.  
 
 ```bash
-petersen@rhino03:~ galaxy
+username@rhino03:~ galaxy
 Enter number to select your Galaxy install
-1) /fh/fast/_HDC/user/petersen/galaxies/demo/
-2) /fh/fast/_HDC/user/petersen/galaxies/production/
-3) /fh/fast/_HDC/user/petersen/galaxies/latest/
-4) /fh/fast/_HDC/user/petersen/galaxies/solarsystem/
-5) New-Install
-#? 5
-New Install: Enter a name for the Galaxy instance: brandnew
+1) New-Install
+#? 1 
+New Install: Enter a name for the Galaxy instance: test_galaxy
 ```
 
-A few minutes after the installation has been started you receive an email like this:
+FIXME: need to leave window open? does `galaxy` wrap sbatch?
+
+A few minutes after the installation has been started you should receive an email like this:
 
 ![]({{ site.baseurl }}/compdemos/assets/2020-06-17-01-10-04.png)
 
-Now you wait about 30 min. If you click on the link before Galaxy has finished installing you will see a proxy error: 
-
-![Proxy Error]({{ site.baseurl }}/compdemos/assets/2020-06-17-01-12-09.png)
-
-
-Try again after a while. Then you should see the Galaxy login screen. Use your HutchnetID and password to login to the Galaxy interface:
+Now you wait about 30 min. Then you should see the Galaxy login screen. Use your HutchnetID and password to login to the Galaxy interface:
 
 ![Login Screen]({{ site.baseurl }}/compdemos/assets/2020-06-17-01-19-43.png)
 
 
 To terminate the Galaxy instance just type Ctrl+c twice inside the terminal Window. It will cancel the cluster job that runs Galaxy. 
 
+## Rerunning a previously created Galaxy instance
 
-## Current Issues
+```bash
+username@rhino03:~ galaxy
+Enter number to select your Galaxy install
+1) /fh/fast/_HDC/user/username/galaxies/demo/
+2) New-Install
+#? 1
+```
+
+## Loading data into Galaxy
+
+### Data from Fred Hutch storage
+
+### Reference data
+
+## Suggestions for making the most of Galaxy
+
+Please check the [Galaxy Documentation](https://docs.galaxyproject.org/) for more general information about using Galaxy. 
+
+### Reproducible workflows
+
+### Sharing your Galaxy instance with Hutch collaborators
+
+### Transferring analyses outside Galaxy
+
+## Troubleshooting
+
+### Proxy error
+
+If you click on the link before your Galaxy instance has finished installing you will see a proxy error: 
+
+![Proxy Error]({{ site.baseurl }}/compdemos/assets/2020-06-17-01-12-09.png)
+
+
+Try again after a while. Then you should see the Galaxy login screen. 
+
+### Wrong session token
 
 When using Chrome, you might see this error message:
 
@@ -62,10 +112,32 @@ When using Chrome, you might see this error message:
 
 To fix the issue please reset all fhcrc.org Cookies from your Chrome browser or use a new incognito window or use a different browser such as Firefox.
 
-To remove Cookies from Chrome, go to   
--> Settings -> Privacy and Security 
--> Cookies and other site data
--> See all cookies and site data 
--> in the upper right search for fhcrc.org
-and then click Remove all shown and restart Chrome
+To remove Cookies from Chrome, go to:  
+- Settings -> Privacy and Security 
+- Cookies and other site data
+- See all cookies and site data 
+- in the upper right search for fhcrc.org
+- click "Remove all shown" and restart Chrome
 
+## Why this method of supporting Galaxy?
+
+In the past,
+fredhutch.io supported a Galaxy instance for our research community, 
+and we tested using an external company, Globus Genomics,
+to support Galaxy.
+
+free use by academic researchers,
+but this requires you to transfer your data,
+and the computational capacity is limited since it is shared with many other people.
+
+Other organizations make [Galaxy](https://usegalaxy.org/) available for free use by academic researchers,
+but this requires you to transfer your data,
+and the computational capacity is limited since it is shared with many other people.
+
+- HutchNet ID authentication will be used 
+- The instance will run with the launching user's permissions, these will be used for all data library access (e.g. file system)
+- User maintains their own workflows (and thus can migratee them to newer installation of Galaxy if/when needed)
+- User can self install the software as well as restart existing Galaxy servers, or make new ones if needed
+- A simple database is provided (sqlite instead of Postgres)
+- Each user can have access to multiple Galaxy instances (e.g. in case software updates need to be implemented)
+- Galaxy server will run on a `gizmo` node, thus compute capacity is limited to single node (36 cores)
