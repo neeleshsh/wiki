@@ -94,6 +94,9 @@ These resources are organized in a lecture type format as slides, screencasts, a
   
 - [CalTech](http://work.caltech.edu/telecourse) Learning from Data
   - *A free YouTube series*
+  
+- [Intellipaat](https://intellipaat.com/): Offers courses for AI, Python and [Data Science](https://intellipaat.com/academy/course/python-for-data-science-free-training/).
+ - *Academy courses are free while others are paid*
 
 ### Interactive Coding Platforms
 These resources offer classes that are work-at-your-own-pace with a major focus on hands-on problem-sets and projects.
